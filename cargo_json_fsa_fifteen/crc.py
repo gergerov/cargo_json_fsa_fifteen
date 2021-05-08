@@ -3,17 +3,6 @@ import pyparsing as pars
 from cargo_json_fsa_fifteen import data_elements as b
 from cargo_json_fsa_fifteen.oci import oci
 
-time_of_departure_information = (
-    pars.Group(
-        b.slant_separator +
-        b.type_of_time_indicator('type_of_time_indicator') +
-        b.time('time') +
-        pars.Optional(
-            b.hiphen_separator +
-            b.day_change_indicator_template('day_change_indicator')
-        )
-    )
-)('time_of_departure_information')
 
 quantity_detail = (
     pars.Group(
@@ -27,17 +16,6 @@ quantity_detail = (
     )
 )('quantity_detail')
 
-time_of_arrival_information = (
-    pars.Group(
-        b.slant_separator +
-        b.type_of_time_indicator('type_of_time_indicator') +
-        b.time('time') +
-        pars.Optional(
-            b.hiphen_separator +
-            b.day_change_indicator_template('day_change_indicator')
-        )
-    )
-)('time_of_arrival_information')
 
 movement_detail = (
     pars.Group(
@@ -52,14 +30,28 @@ movement_detail = (
     )
 )('movement_detail')
 
-status_detail_dep = (
+
+reporting_detail = (
     pars.Group(
-        pars.Literal('DEP')('status_code') +
+        b.day('day_of_scheduled_departure') +
+        b.month('month_of_scheduled_departure') +
+        b.time('actual_time_of_given_status_event') +
         b.slant_separator +
-        movement_detail +
+        b.airport_code('airport_code_of_reporting')
+    )
+)('movement_detail')
+
+
+status_detail_crc = (
+    pars.Group(
+        pars.Literal('CRC')('status_code') +
+        b.slant_separator +
+        reporting_detail +
         quantity_detail +
-        pars.Optional(time_of_departure_information) +
-        pars.Optional(time_of_arrival_information) +
+        pars.Optional(
+            b.slant_separator +
+            movement_detail
+        ) +
         b.crlf_separator +
         pars.Optional(oci)
     )

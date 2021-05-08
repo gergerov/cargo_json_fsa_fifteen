@@ -29,6 +29,8 @@ volume_code = pars.Word('CFMI', exact=2)
 volume_amount = pars.Word(pars.nums + '.', min=1, max=9)
 density_indicator = pars.Word('DG', exact=2)
 density_group = pars.Word(pars.nums, min=1, max=2)
+name = pars.Word(pars.alphanums, min=1, max=35)
+transfer_manifest_number = pars.Word(pars.nums, exact=6)
 
 uld_type = pars.Combine(
     pars.Word(pars.alphas, exact=1) +
@@ -47,5 +49,14 @@ flight_number = pars.Combine(
     + pars.Optional(pars.Word(pars.alphas, exact=1))
 )
 
+_fdaw = pars.Literal('FDAW')
+_fdca = pars.Literal('FDCA')
+_msaw = pars.Literal('MSAW')
+_msca = pars.Literal('MSCA')
+_dfld = pars.Literal('DFLD')
+_ofld = pars.Literal('OFLD')
+_ovcd = pars.Literal('OVCD')
+_sspd = pars.Literal('SSPD')
 
+discrepancy_code = (_fdaw ^ _fdca ^ _msca ^ _msaw ^ _dfld ^ _ofld ^ _ovcd ^ _sspd)
 

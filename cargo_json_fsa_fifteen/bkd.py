@@ -64,7 +64,7 @@ quantity_detail = (
 
 status_detail_bkd = (
     pars.Group(
-        b.status_code('status_code') +
+        pars.Literal('BKD')('status_code') +
         b.slant_separator +
         movement_detail +
         quantity_detail +

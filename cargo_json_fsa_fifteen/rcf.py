@@ -12,7 +12,7 @@ movement_detail = (
             b.slant_separator +
         b.day('day_of_scheduled_arrival') +
         b.month('month_of_scheduled_arrival') +
-        b.time('actual_time_of_givan_status_event') +
+        b.time('actual_time_of_given_status_event') +
         pars.Optional(
             b.hiphen_separator +
             b.day_change_indicator_template('day_change_indicator')
@@ -66,7 +66,7 @@ time_of_departure_information = (
 
 status_detail_rcf = (
     pars.Group(
-        b.status_code('status_code') +
+        pars.Literal('RCF')('status_code') +
         b.slant_separator +
         movement_detail +
         quantity_detail +

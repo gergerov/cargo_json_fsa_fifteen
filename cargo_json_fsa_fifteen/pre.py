@@ -3,19 +3,6 @@ import pyparsing as pars
 from cargo_json_fsa_fifteen import data_elements as b
 from cargo_json_fsa_fifteen.oci import oci
 
-movement_detail = (
-    pars.Group(
-        pars.Optional(b.carrier_code)('carrier_code') +
-        pars.Optional(b.flight_number)('flight_number') +
-            b.slant_separator +
-        pars.Optional(b.day)('day_of_scheduled_departure') +
-        pars.Optional(b.month)('month_of_scheduled_departure') +
-            b.slant_separator +
-        b.airport_code('airport_code_of_departure') +
-        b.airport_code('airport_code_of_arrival')
-    )
-)('movement_detail')
-
 
 quantity_detail = (
     pars.Group(
@@ -28,20 +15,6 @@ quantity_detail = (
         )
     )
 )('quantity_detail')
-
-
-time_of_departure_information = (
-    pars.Group(
-        b.slant_separator +
-        b.type_of_time_indicator('type_of_time_indicator') +
-        b.time('time') +
-        pars.Optional(
-            b.hiphen_separator +
-            b.day_change_indicator_template('day_change_indicator')
-        )
-    )
-)('time_of_departure_information')
-
 
 
 time_of_arrival_information = (
@@ -57,9 +30,36 @@ time_of_arrival_information = (
 )('time_of_arrival_information')
 
 
-status_detail_man = (
+time_of_departure_information = (
     pars.Group(
-        pars.Literal('MAN')('status_code') +
+        b.slant_separator +
+        b.type_of_time_indicator('type_of_time_indicator') +
+        b.time('time') +
+        pars.Optional(
+            b.hiphen_separator +
+            b.day_change_indicator_template('day_change_indicator')
+        )
+    )
+)('time_of_departure_information')
+
+
+movement_detail = (
+    pars.Group(
+        pars.Optional(b.carrier_code('carrier_code')) +
+        pars.Optional(b.flight_number('flight_number')) +
+            b.slant_separator +
+        pars.Optional(b.day('day_of_scheduled_departure')) +
+        pars.Optional(b.month('month_of_scheduled_arrival')) +
+        b.slant_separator +
+        b.airport_code('airport_code_of_departure') +
+        b.airport_code('airport_code_of_arrival')
+    )
+)('movement_detail')
+
+
+status_detail_pre = (
+    pars.Group(
+        pars.Literal('PRE')('status_code') +
         b.slant_separator +
         movement_detail +
         quantity_detail +
@@ -69,5 +69,3 @@ status_detail_man = (
         pars.Optional(oci)
     )
 )('status_detail')
-
-
